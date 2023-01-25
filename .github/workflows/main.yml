@@ -9,6 +9,9 @@ jobs:
  actions-tagger:
   runs-on: ubuntu-latest
   steps:
+   - uses: actions/checkout@v2
+     with:
+      ref: ${{ github.head_ref }}
    - uses: robinraju/release-downloader@v1.7
      with:
       latest: true
