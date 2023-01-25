@@ -1,0 +1,16 @@
+name: release to dev
+
+on:
+  release:
+    types: [published]
+
+jobs:
+ actions-tagger:
+  runs-on: linux
+  steps:
+   - uses: robinraju/release-downloader@v1.7
+     with:
+      latest: true
+      zipBall: true
+      run: |
+          ls
