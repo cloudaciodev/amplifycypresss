@@ -5,14 +5,12 @@ on:
     types: [published]
 
 jobs:
- actions-tagger:
-  runs-on: ubuntu-latest
-  steps:
-   - name: get release
-     uses: robinraju/release-downloader@v1.7
-     with:
-      latest: true
-      zipBall: true
-   - name: trigger amplify pipeline with webhook
-     run: |
-         ls *.zip
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest release
+        id: latest_release
+        uses: kaliber5/action-get-release@v1
+        with:
+          token: ${{ github.token }}
+          latest: true
