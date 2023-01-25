@@ -9,9 +9,22 @@ jobs:
  actions-tagger:
   runs-on: ubuntu-latest
   steps:
-   - uses: actions/checkout@v2
+   - name: Get latest release
+     id: latest_release
+     uses: kaliber5/action-get-release@v1
      with:
-      ref: ${{ github.head_ref }}
+          token: ${{ github.token }}
+          latest: true
+   - name: Dump env
+     run: env | sort
+   - name: Dump GitHub context
+     env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+     run: |
+       sudo apt install -y jq
+       BRANCH=$(echo "$GITHUB_CONTEXT" | jq -r '.event.release.target_commitish')
+       echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+       
    - uses: robinraju/release-downloader@v1.7
      with:
       latest: true
@@ -21,3 +34,4 @@ jobs:
    - uses: stefanzweifel/git-auto-commit-action@v4
      with:
         commit_message: push new release
+        branch: ${{ env.BRANCH }}
