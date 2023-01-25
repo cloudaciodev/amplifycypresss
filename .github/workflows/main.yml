@@ -14,4 +14,9 @@ jobs:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+        run: |
+          sudo apt install -y jq
+          branch=$(echo "$GITHUB_CONTEXT" | jq -r '.event.release.target_commitish')
+          if [ "$branch" = "master" ]; then 
+               curl -X POST -d {} "https://webhooks.amplify.us-east-1.amazonaws.com/prod/webhooks?id=83e36d86-817e-4490-94f7-bde435023f16&token=faTSoq0YgXZxlKnabRNwo6m98DlV9Bzz0jY6cRQkJEs&operation=startbuild" -H "Content-Type:application/json"
+          fi     
